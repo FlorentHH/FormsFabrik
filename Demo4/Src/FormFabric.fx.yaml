@@ -243,7 +243,7 @@ FormFabric As screen:
                     =Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.Value})
                 ShowGoToToday: =true
                 ShowWeekNumbers: =true
-                Width: =320
+                Width: =380
                 X: =lblMid.Width
                 Y: =lblMid.Y
                 ZIndex: =5
@@ -368,6 +368,8 @@ FormFabric As screen:
                 RadiusTopLeft: =2
                 RadiusTopRight: =2
                 Size: =10.5
+                Width: |
+                    =380
                 X: =lblMid_1.X+lblMid_1.Width
                 Y: =lblMid_1.Y+1
                 ZIndex: =4
@@ -388,7 +390,7 @@ FormFabric As screen:
                     If(lblBot_1.Visible,lblBot_1.Height,0)+
                     If(TextInput1_1.Visible,TextInput1_1.Height,0)+
                     If(lblTop_1.Visible,lblTop_1.Height+lblTop_1.Y,0)
-                    +If(multipleList.Visible,multipleList.Height+5,0)+10
+                    +If(multipleList.Visible,multipleList.Height+5,0)+20
                     //},If(aaa<40,40,aaa))
                 Visible: =vCommandBar="Show Parameters"
                 Width: =100
@@ -398,6 +400,7 @@ FormFabric As screen:
             multipleList As gallery.galleryVertical:
                 AccessibleLabel: =ThisItem.ID
                 BorderColor: =RGBA(166, 166, 166, 1)
+                BorderThickness: =1
                 Fill: =RGBA(255, 255, 255, 1)
                 Height: =RoundUp(CountRows(Self.AllItems)/3,0)*(Self.TemplateHeight+Self.TemplatePadding+5)
                 Items: |-
@@ -413,11 +416,14 @@ FormFabric As screen:
                         ),Blank())
                 Layout: =Layout.Vertical
                 TemplateSize: =35
-                Visible: =If(Text(ParseJSON(ThisItem.Parameters).multiple)="true",true,false)
-                Width: =(listString.Width+10)*3
+                Visible: |-
+                    =If(And(Text(ParseJSON(ThisItem.Parameters).multiple)="true",CountRows(Self.AllItems)>0)
+                    
+                    ,true,false)
+                Width: =Parent.Width-Self.X-30
                 WrapCount: =3
                 X: =58
-                Y: =If(lblBot_1.Visible, lblBot_1.Y+lblBot_1.Height,lblMid_1.Height+lblMid_1.Y)
+                Y: =If(lblBot_1.Visible, lblBot_1.Y+lblBot_1.Height,lblMid_1.Height+lblMid_1.Y)+10
                 ZIndex: =6
 
                 listString As label:
@@ -438,8 +444,8 @@ FormFabric As screen:
                     PaddingTop: =0
                     Size: =10.5
                     Text: =ThisItem._Val
-                    Width: =180
-                    Y: =5
+                    Width: =Parent.Width/3-10
+                    Y: =3
                     ZIndex: =1
 
                 listRemove As icon.Cancel:
@@ -610,9 +616,8 @@ FormFabric As screen:
         "inputPersonPicker As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
             BorderColor: =RGBA(166, 166, 166, 1)
-            Height: |-
-                =//Value(First(Self.AllItems).vHeightDynamic_2.Text)
-                200
+            Height: |
+                =Value(First(Self.AllItems).vHeightDynamic_2.Text)
             Items: =ThisItem
             Layout: =Layout.Vertical
             ShowScrollbar: =false
@@ -668,52 +673,69 @@ FormFabric As screen:
                 OnSelect: =Select(Parent)
                 Size: =13
                 Text: |-
-                    =If(lblBot_2.Visible,lblBot_2.Height,0)+
-                    If(lblMid_2.Visible,lblMid_2.Height,0)
-                    +If(lblTop_2.Visible,lblTop_2.Height+lblTop_2.Y,0)+10
+                    =If(lblBot_2.Visible,lblBot_2.Height,0)
+                    +If(lblMid_2.Visible,lblMid_2.Height,0)
+                    +If(lblTop_2.Visible,lblTop_2.Height+lblTop_2.Y,0)
+                    +If(PersonPickerList.Visible,PersonPickerList.Height,0)
+                    +If(PersonPickerSelected.Visible,PersonPickerSelected.Height,0)+30
                 Visible: =vCommandBar="Show Parameters"
                 Width: =100
                 X: =1000
                 ZIndex: =6
 
-            "SearchBox1_1 As 'Fluent SearchBox (1.0.19) Preview'":
-                DisplayMode: =DisplayMode.Edit
-                Height: =40
-                Theme: =AppThemeJson2
-                Visible: =true
-                Width: =350
-                X: =lblMid_2.Width
-                Y: =0
-                ZIndex: =8
-
             PersonPickerSelected As gallery.galleryVertical:
                 BorderColor: =RGBA(166, 166, 166, 1)
+                BorderThickness: =1
                 DelayItemLoading: =true
-                Height: =77
+                Height: =RoundUp(CountRows(Self.AllItems)/2,0)*37
+                Items: |-
+                    =[{val:"aaa"},{val:"aaa"},{val:"aaa"},{val:"aaa"},{val:"aaa"}]
                 Layout: =Layout.Vertical
                 LoadingSpinner: =LoadingSpinner.Data
-                TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-                Visible: =false
+                TemplateSize: |
+                    =30
+                Visible: =CountRows(Self.AllItems)>0
                 Width: |
-                    =350
-                X: =SearchBox1_1.X
-                Y: =255
+                    =Parent.Width-Self.X-30
+                WrapCount: =2
+                X: |
+                    =10
+                Y: =TextInput1_2.Y+TextInput1_2.Height+10+If(PersonPickerList.Visible,PersonPickerList.Height+10,0)
                 ZIndex: =14
+
+                Label17 As label:
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    BorderThickness: =2
+                    Color: =RGBA(51, 51, 51, 1)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledColor: =RGBA(166, 166, 166, 1)
+                    Fill: =ColorValue(AppTheme.palette.white)
+                    FocusedBorderThickness: =4
+                    Font: =Font.'Segoe UI'
+                    Height: =30
+                    OnSelect: =Select(Parent)
+                    Size: =10.5
+                    Text: =ThisItem.val
+                    Width: |
+                        =Parent.Width/2-10
+                    ZIndex: =1
 
             PersonPickerList As gallery.galleryVertical:
                 BorderColor: =RGBA(166, 166, 166, 1)
+                BorderThickness: =1
                 DelayItemLoading: =true
-                Height: =77
+                Height: =75
                 Items: |-
-                    =If(!IsBlank(Trim(SearchBox1_1.SearchText)), Office365Users.SearchUser({searchTerm: Trim(SearchBox1_1.SearchText), top: 15}))
+                    =If(!IsBlank(Trim(TextInput1_2.Text)), Office365Users.SearchUser({searchTerm: Trim(TextInput1_2.Text), top: 4}))
                 Layout: =Layout.Vertical
                 LoadingSpinner: =LoadingSpinner.Data
-                TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-                Visible: =!IsBlank(SearchBox1_1.SearchText)
-                Width: =lblMid_2.Width+SearchBox1_1.Width
+                TemplateSize: =30
+                Visible: =!IsBlank(TextInput1_2.Text)
+                Width: =Parent.Width-Self.X-30
                 WrapCount: =2
                 X: =10
-                Y: =SearchBox1_1.Y+SearchBox1_1.Height
+                Y: =TextInput1_2.Y+TextInput1_2.Height+10
                 ZIndex: =15
 
                 Label9 As label:
@@ -727,11 +749,64 @@ FormFabric As screen:
                     FocusedBorderThickness: =4
                     Font: =Font.'Segoe UI'
                     Height: =30
+                    HoverBorderColor: =ColorValue(AppTheme.palette.themePrimary)
                     OnSelect: =Select(Parent)
                     Size: =10.5
                     Text: =ThisItem.UserPrincipalName
                     Width: =Parent.Width/2-10
                     ZIndex: =1
+
+            TextInput1_2 As text:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =""
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                FocusedBorderColor: =ColorValue(AppTheme.palette.themePrimary)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =ColorValue(AppTheme.palette.themePrimary)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                OnChange: |+
+                    =If(Boolean(ParseJSON(ThisItem.Parameters).multiple),
+                    
+                    If(Self.Text in LookUp(cResult,ID=ThisItem.ID).response,Notify("Duplicate Entries",NotificationType.Warning),
+                    
+                    With({previousInput:LookUp(cResult,ID=ThisItem.ID)},
+                    
+                    Patch(cResult,previousInput,{response:previousInput.response&
+                        "{"&Char(34)&"Val"&Char(34)&":"&Char(34)&Self.Text&Char(34)&"}"});
+                    
+                    With({newInput:LookUp(cResult,ID=ThisItem.ID)},
+                    Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
+                    
+                    )) // End IF already
+                    );Reset(Self),
+                    
+                    Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.Text})
+                    )
+                    
+                    
+                    
+                    
+                    
+                    
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =RGBA(105, 121, 126, 1)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(255, 255, 255, 1)
+                RadiusBottomLeft: =2
+                RadiusBottomRight: =2
+                RadiusTopLeft: =2
+                RadiusTopRight: =2
+                Size: =10.5
+                Width: |
+                    =380
+                X: =lblMid_1.X+lblMid_1.Width
+                Y: =lblMid_1.Y+1
+                ZIndex: =16
 
         inputRadioList As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -1002,18 +1077,4 @@ FormFabric As screen:
             X: =382
             Y: =80
             ZIndex: =12
-
-        Label16 As label:
-            BorderColor: =RGBA(0, 0, 0, 0)
-            BorderStyle: =BorderStyle.None
-            BorderThickness: =2
-            Color: =RGBA(51, 51, 51, 1)
-            DisabledBorderColor: =RGBA(0, 0, 0, 0)
-            DisabledColor: =RGBA(166, 166, 166, 1)
-            FocusedBorderThickness: =4
-            Font: =Font.'Segoe UI'
-            Size: =13
-            Text: ="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"
-            X: =1770
-            ZIndex: =13
 

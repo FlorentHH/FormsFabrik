@@ -153,7 +153,7 @@
         "Name": "imgExpandButton",
         "Parent": "ExpandMenu",
         "PersistMetaDataIDKey": false,
-        "PublishOrderIndex": 253,
+        "PublishOrderIndex": 254,
         "Rules": [
           {
             "Category": "Data",
@@ -407,7 +407,7 @@
             "Name": "galleryTemplate7",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 255,
+            "PublishOrderIndex": 256,
             "Rules": [
               {
                 "Category": "Design",
@@ -588,7 +588,7 @@
             "Name": "lbLabel",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 256,
+            "PublishOrderIndex": 257,
             "Rules": [
               {
                 "Category": "Data",
@@ -938,7 +938,7 @@
             "Name": "rectHighlight",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 257,
+            "PublishOrderIndex": 258,
             "Rules": [
               {
                 "Category": "Data",
@@ -1191,7 +1191,7 @@
             "Name": "imgIcon",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 258,
+            "PublishOrderIndex": 259,
             "Rules": [
               {
                 "Category": "Data",
@@ -1510,7 +1510,7 @@
         "Name": "glExpandMenu",
         "Parent": "ExpandMenu",
         "PersistMetaDataIDKey": false,
-        "PublishOrderIndex": 254,
+        "PublishOrderIndex": 255,
         "Rules": [
           {
             "Category": "Data",

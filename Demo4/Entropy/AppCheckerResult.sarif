@@ -2799,6 +2799,36 @@
             {
               "logicalLocations": [
                 {
+                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2.AccessibleLabel"
+                }
+              ],
+              "physicalLocation": {
+                "address": {
+                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2.AccessibleLabel",
+                  "relativeAddress": 0
+                }
+              },
+              "properties": {
+                "member": "AccessibleLabel",
+                "module": "FormFabric",
+                "type": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2"
+              }
+            }
+          ],
+          "message": {
+            "id": "issue"
+          },
+          "properties": {
+            "level": "Medium"
+          },
+          "ruleId": "acc-AccessibleLabelNeeded",
+          "ruleIndex": 2
+        },
+        {
+          "locations": [
+            {
+              "logicalLocations": [
+                {
                   "fullyQualifiedName": "App._selectedUser"
                 }
               ],
@@ -3686,7 +3716,7 @@
                 ],
                 "level": "Medium",
                 "primaryCategory": "performance",
-                "whyFix": "Each control consumes resources, and an app may become slow or unresponsive if a screen has too many controls. The estimated complexity of \"FormFabric\" is 2129, which exceeds the maximum threshold recommended (300)."
+                "whyFix": "Each control consumes resources, and an app may become slow or unresponsive if a screen has too many controls. The estimated complexity of \"FormFabric\" is 2253, which exceeds the maximum threshold recommended (300)."
               }
             },
             {
