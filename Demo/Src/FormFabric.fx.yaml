@@ -301,7 +301,80 @@ FormFabric As screen:
             Visible: =vCommandBar="Show Parameters"
             X: =1100
             ZIndex: =1
+        
+        inputRadioList As gallery.galleryVertical:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Items: =First(CustomGallerySample)
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+        Width: =1187
+        X: =733
+        Y: =505
+        ZIndex: =14
 
+        Gallery2_1 As gallery.galleryVertical:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            DelayItemLoading: =true
+            Height: =275
+            Items: |-
+                =ForAll( Table( ParseJSON( TextInput1.Text ) ), { id: Value(ThisRecord.Value.id), name: Text(ThisRecord.Value.name) } )
+            Layout: =Layout.Vertical
+            LoadingSpinner: =LoadingSpinner.Data
+            OnSelect: |-
+                =UpdateContext({currentQuestion:ThisItem.name})
+            TemplateSize: =Max(Self.AllItems,Label2_3.Text)
+            Width: =1177
+            WrapCount: =SpinButton1_1.Value
+            ZIndex: =1
+
+            "radioListButton_1 As 'Fluent Icon (1.0.19)'":
+                DisplayMode: =DisplayMode.Edit
+                Height: =1
+                IconName: =If(currentQuestion=ThisItem.name,"RadioBtnOn","RadioBtnOff")
+                IconSize: =28
+                IconType: ='PowerCAT.Icon.IconType'.ActionButton
+                OnChange: =Select(Parent)
+                TextAlignment: ='PowerCAT.Icon.TextAlignment'.Center
+                Theme: =AppThemeJson
+                Width: =31
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+            radioListLabel_1 As Label:
+                AutoHeight: =true
+                DisplayMode: =DisplayMode.Edit
+                FontWeight: =FontWeight.Semibold
+                Height: =1
+                OnSelect: =Select(Parent)
+                PaddingStart: |
+                    =5
+                Text: =ThisItem.name
+                Width: =((Parent.Width/SpinButton1_1.Value)-Self.X)/12*11
+                X: =31
+                Y: =0
+                ZIndex: =2
+
+            Label2_3 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =1
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: =radioListLabel_1.Height
+                Visible: =false
+                Width: =0
+                X: =385.6666666666667
+                ZIndex: =3
+        
         "inputDate As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -870,78 +943,7 @@ FormFabric As screen:
         Y: =80
         ZIndex: =13
 
-    inputRadioList As gallery.galleryVertical:
-        BorderColor: =RGBA(166, 166, 166, 1)
-        DelayItemLoading: =true
-        Items: =First(CustomGallerySample)
-        Layout: =Layout.Vertical
-        LoadingSpinner: =LoadingSpinner.Data
-        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-        Width: =1187
-        X: =733
-        Y: =505
-        ZIndex: =14
-
-        Gallery2_1 As gallery.galleryVertical:
-            BorderColor: =RGBA(166, 166, 166, 1)
-            DelayItemLoading: =true
-            Height: =275
-            Items: |-
-                =ForAll( Table( ParseJSON( TextInput1.Text ) ), { id: Value(ThisRecord.Value.id), name: Text(ThisRecord.Value.name) } )
-            Layout: =Layout.Vertical
-            LoadingSpinner: =LoadingSpinner.Data
-            OnSelect: |-
-                =UpdateContext({currentQuestion:ThisItem.name})
-            TemplateSize: =Max(Self.AllItems,Label2_3.Text)
-            Width: =1177
-            WrapCount: =SpinButton1_1.Value
-            ZIndex: =1
-
-            "radioListButton_1 As 'Fluent Icon (1.0.19)'":
-                DisplayMode: =DisplayMode.Edit
-                Height: =1
-                IconName: =If(currentQuestion=ThisItem.name,"RadioBtnOn","RadioBtnOff")
-                IconSize: =28
-                IconType: ='PowerCAT.Icon.IconType'.ActionButton
-                OnChange: =Select(Parent)
-                TextAlignment: ='PowerCAT.Icon.TextAlignment'.Center
-                Theme: =AppThemeJson
-                Width: =31
-                X: =0
-                Y: =0
-                ZIndex: =1
-
-            radioListLabel_1 As Label:
-                AutoHeight: =true
-                DisplayMode: =DisplayMode.Edit
-                FontWeight: =FontWeight.Semibold
-                Height: =1
-                OnSelect: =Select(Parent)
-                PaddingStart: |
-                    =5
-                Text: =ThisItem.name
-                Width: =((Parent.Width/SpinButton1_1.Value)-Self.X)/12*11
-                X: =31
-                Y: =0
-                ZIndex: =2
-
-            Label2_3 As label:
-                BorderColor: =RGBA(0, 0, 0, 0)
-                BorderStyle: =BorderStyle.None
-                BorderThickness: =2
-                Color: =RGBA(51, 51, 51, 1)
-                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                DisabledColor: =RGBA(166, 166, 166, 1)
-                FocusedBorderThickness: =4
-                Font: =Font.'Segoe UI'
-                Height: =1
-                OnSelect: =Select(Parent)
-                Size: =13
-                Text: =radioListLabel_1.Height
-                Visible: =false
-                Width: =0
-                X: =385.6666666666667
-                ZIndex: =3
+    
 
     Label16 As label:
         BorderColor: =RGBA(0, 0, 0, 0)
