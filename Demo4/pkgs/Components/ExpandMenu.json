@@ -153,7 +153,7 @@
         "Name": "imgExpandButton",
         "Parent": "ExpandMenu",
         "PersistMetaDataIDKey": false,
-        "PublishOrderIndex": 211,
+        "PublishOrderIndex": 215,
         "Rules": [
           {
             "Category": "Data",
@@ -407,7 +407,7 @@
             "Name": "galleryTemplate7",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 213,
+            "PublishOrderIndex": 217,
             "Rules": [
               {
                 "Category": "Design",
@@ -588,7 +588,7 @@
             "Name": "lbLabel",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 214,
+            "PublishOrderIndex": 218,
             "Rules": [
               {
                 "Category": "Data",
@@ -938,7 +938,7 @@
             "Name": "rectHighlight",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 215,
+            "PublishOrderIndex": 219,
             "Rules": [
               {
                 "Category": "Data",
@@ -1191,7 +1191,7 @@
             "Name": "imgIcon",
             "Parent": "glExpandMenu",
             "PersistMetaDataIDKey": false,
-            "PublishOrderIndex": 216,
+            "PublishOrderIndex": 220,
             "Rules": [
               {
                 "Category": "Data",
@@ -1510,7 +1510,7 @@
         "Name": "glExpandMenu",
         "Parent": "ExpandMenu",
         "PersistMetaDataIDKey": false,
-        "PublishOrderIndex": 212,
+        "PublishOrderIndex": 216,
         "Rules": [
           {
             "Category": "Data",

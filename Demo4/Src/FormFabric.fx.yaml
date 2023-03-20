@@ -869,6 +869,32 @@ FormFabric As screen:
                 Y: =40
                 ZIndex: =5
 
+    PersonPickerSelected As gallery.galleryVertical:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Height: =77
+        Items: =CustomGallerySample
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+        Width: =605
+        X: =1209
+        Y: =255
+        ZIndex: =14
+
+    PersonPickerList As gallery.galleryVertical:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Height: =77
+        Items: =CustomGallerySample
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+        Width: =605
+        X: =1191
+        Y: =178
+        ZIndex: =15
+
     Group1 As group:
         Height: =5
         Width: =5
@@ -1006,7 +1032,7 @@ FormFabric As screen:
             Width: =709
             X: =382
             Y: =80
-            ZIndex: =13
+            ZIndex: =12
 
         Label16 As label:
             BorderColor: =RGBA(0, 0, 0, 0)
@@ -1020,5 +1046,5 @@ FormFabric As screen:
             Size: =13
             Text: ="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"
             X: =1770
-            ZIndex: =15
+            ZIndex: =13
 
