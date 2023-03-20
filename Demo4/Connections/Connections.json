@@ -1,0 +1,58 @@
+{
+  "46df8e4e-677b-4c9c-9dd2-61f6f92e0f67": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Office 365 Users",
+      "iconUri": "https://connectoricons-prod.azureedge.net/u/laborbol/releases/ase-v3/1.0.1622.3202/office365users/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_office365users",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {},
+    "dataSources": [
+      "Office365Users"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "46df8e4e-677b-4c9c-9dd2-61f6f92e0f67"
+  },
+  "ebce3876-4bdf-45f0-85fc-59e08b1ac367": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "SharePoint",
+      "iconUri": "https://connectoricons-prod.azureedge.net/u/laborbol/releases/ase-v3/1.0.1622.3202/sharepointonline/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_sharepointonline",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {
+      "https://1bbmrx.sharepoint.com/sites/UniversalForms": {
+        "dataSources": {
+          "Forms": {
+            "tableName": "3ea1c06a-cdc9-4a9b-9169-2094716ddd70"
+          },
+          "Questions": {
+            "tableName": "088ce292-d1b1-4156-8f88-3d242b138269"
+          },
+          "Responses": {
+            "tableName": "e8029950-a953-4123-879d-cfcd5e3199c2"
+          }
+        }
+      }
+    },
+    "dataSources": [
+      "Forms",
+      "Questions",
+      "Responses"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "ebce3876-4bdf-45f0-85fc-59e08b1ac367"
+  }
+}

@@ -1,0 +1,1024 @@
+FormFabric As screen:
+    Fill: =RGBA(247,249,250,1)
+    LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+    OnVisible: |-
+        =UpdateContext({showLoadingForm:true});
+        ClearCollect(cQuestions,{});Clear(cQuestions);
+        ClearCollect(cResult,{});Clear(cResult);
+        
+        ForAll(ForAll(Split(
+            LookUp(Forms,Title=Nav1_1.Selected.ItemDisplayName).Questions
+            ,","), {Result: ThisRecord.Value}),
+        With({vId:Value(Result)},
+        Collect(cQuestions,LookUp(Questions,ID=vId));
+        Collect(cResult,{ID:vId,response:"",savedName:LookUp(cQuestions,ID=vId).SavedName})
+        ));
+        
+        
+        
+        
+        ClearCollect(globalVariable
+        ,{type:"screenStatus",value:"Edit"}
+        );
+        
+        
+        
+        ClearCollect(
+            PreSelectedUserCollection,
+            AddColumns(
+               // Get first 5 users who have email ID - optional
+                Filter(
+                    Office365Users.SearchUser({top: 5}),
+                    Mail <> Blank()
+                ),
+                "PersonaKey",
+                Mail,
+                "PersonaName",
+                DisplayName,
+                "PersonaImgUrl",
+                //Get base64 image data
+                Substitute(
+                    JSON(
+                        Office365Users.UserPhotoV2(Id),
+                        JSONFormat.IncludeBinaryData
+                    ),
+                    """",
+                    ""
+                )
+            )
+        );Clear(PreSelectedUserCollection);
+        
+        Clear(barNav);
+        ForAll(Forms,Collect(barNav,{ItemKey:ThisRecord.ID,ItemDisplayName:ThisRecord.Name}));
+        UpdateContext({showLoadingForm:false});
+
+    glrResult As gallery.galleryVertical:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Fill: =RGBA(255, 255, 255, 1)
+        Items: =cResult
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: =138
+        Visible: =vCommandBar="Show Result"
+        X: =1156
+        Y: =130
+        ZIndex: =9
+
+        Label7 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Select(Parent)
+            Size: =10.5
+            Text: =ThisItem.savedName
+            ZIndex: =1
+
+        Label7_1 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            OnSelect: =Select(Parent)
+            Size: =10.5
+            Text: =IfError(ThisItem.response,"")
+            Width: =441
+            X: =189
+            ZIndex: =2
+
+    glrGlobalVariable As gallery.galleryVertical:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Fill: =RGBA(255, 255, 255, 1)
+        Items: =globalVariable
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: =138
+        Visible: =vCommandBar="Show Variables"
+        X: =1156
+        Y: =130
+        ZIndex: =10
+
+        Label7_3 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Select(Parent)
+            Size: =10.5
+            Text: =ThisItem.type
+            ZIndex: =1
+
+        Label7_2 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            OnSelect: =Select(Parent)
+            Size: =10.5
+            Text: =ThisItem.value
+            Width: =441
+            X: =189
+            ZIndex: =2
+
+    dynamicForm As gallery.variableTemplateHeightGallery:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DelayItemLoading: =true
+        Height: =935
+        Items: =If(showSubForm,cSubForm,cQuestions)
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplatePadding: =1
+        TemplateSize: =280
+        Width: =If(vCommandBar="Show Parameters",1300,709)
+        X: =391
+        Y: =93
+        ZIndex: =11
+
+        vVisible As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            OnSelect: =Select(Parent)
+            Size: =13
+            Text: |-
+                =If(!IsBlank(ThisItem.ConditionnalDisplay),
+                
+                With({conditionAny:Concat(ForAll(Filter(ForAll(
+                        Table(ParseJSON(ThisItem.ConditionnalDisplay)),// ici ça serait un ThisItem
+                        {
+                            type: Text(Value.type),
+                            keyword: Text(Value.keyword),
+                            parentID: Value(Value.parentID)
+                        }),type="any"),
+                !IsBlank(Find(keyword,
+                LookUp(cResult,ID=parentID).response
+                ))),Value)}, // ici ça serait un lookup de la réponse du parent
+                !IsBlank(Find("true",conditionAny))
+                ),true)
+            Visible: =vCommandBar="Show Parameters"
+            X: =1100
+            ZIndex: =1
+
+        "inputDate As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+            AccessibleLabel: =
+            BorderColor: =RGBA(166, 166, 166, 1)
+            Height: =Value(First(Self.AllItems).vHeightDynamic_1.Text)
+            Items: =ThisItem
+            Layout: =Layout.Vertical
+            ShowScrollbar: =false
+            TemplatePadding: =0
+            TemplateSize: =lblBot_1.Height+lblMid_1.Height+lblTop_1.Height
+            Transition: =Transition.Pop
+            Visible: =And(First(Self.AllItems).InputType.Value="Date",Boolean(vVisible.Text))
+            Width: =Parent.Width
+            ZIndex: =4
+
+            lblTop As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Top
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =Parent.Width
+                ZIndex: =1
+
+            lblMid As htmlViewer:
+                Fill: =RGBA(0, 0, 0, 0)
+                Font: =Font.'Segoe UI'
+                Height: =45
+                HtmlText: ="<b>"&ThisItem.Name&"</b>"
+                OnSelect: =Select(Parent)
+                Width: |
+                    =300
+                Y: |-
+                    =If(lblTop.Visible,
+                    lblTop.Height+lblTop.Y,0)
+                ZIndex: =2
+
+            lblBot As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Bot
+                OnSelect: =Select(Parent)
+                Visible: =false
+                Width: =Parent.Width
+                X: |
+                    =0
+                Y: =DatePicker1_2.Height+DatePicker1_2.Y
+                ZIndex: =3
+
+            "DatePicker1_2 As 'Date picker'":
+                DisplayMode: =DisplayMode.Edit
+                FillColor: =RGBA(0, 0, 0, 0)
+                Height: =38
+                IconFill: =ColorValue(AppTheme.palette.themePrimary)
+                OnChange: |-
+                    =Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.Value})
+                ShowGoToToday: =true
+                ShowWeekNumbers: =true
+                Width: =320
+                X: =lblMid.Width
+                Y: =lblMid.Y
+                ZIndex: =5
+
+            vHeightDynamic_1 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: |-
+                    =/*If(lblBot.Visible,lblBot.Height,0)+
+                    DatePicker1_2.Height+
+                    If(lblTop.Visible,lblTop.Height+lblTop.Y,0)+10*/
+                    lblBot.Height+lblMid.Height+lblTop.Height+15
+                Visible: =vCommandBar="Show Parameters"
+                Width: =50
+                X: =1000
+                ZIndex: =6
+
+        "inputString As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+            AccessibleLabel: =
+            BorderColor: =RGBA(166, 166, 166, 1)
+            Height: =Value(First(Self.AllItems).vHeightDynamic.Text)
+            ItemAccessibleLabel: =
+            Items: =ThisItem
+            Layout: =Layout.Vertical
+            ShowScrollbar: =false
+            TemplatePadding: =0
+            TemplateSize: |-
+                =With({aaa:lblBot_1.Height+lblMid_1.Height+lblTop_1.Height},If(aaa<80,80,aaa))
+            Visible: |+
+                =First(Self.AllItems).InputType.Value="String"
+                
+            Width: =Parent.Width
+            X: |
+                =0
+            ZIndex: =5
+
+            lblTop_1 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                HtmlText: =ThisItem.Top
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =Parent.Width
+                ZIndex: =1
+
+            lblMid_1 As htmlViewer:
+                Fill: =RGBA(0, 0, 0, 0)
+                Font: =Font.'Segoe UI'
+                Height: |
+                    =42
+                HtmlText: |-
+                    ="<b style=text-align:center;>"&ThisItem.Name&"</b>"
+                OnSelect: =Select(Parent)
+                Width: |
+                    =300
+                Y: =If(lblTop_1.Visible,lblTop_1.Y+lblTop_1.Height,0)
+                ZIndex: =2
+
+            lblBot_1 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                HtmlText: =ThisItem.Bot
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(lblBot_1.HtmlText)
+                Width: =Parent.Width
+                X: |
+                    =0
+                Y: =lblMid_1.Y+lblMid_1.Height
+                ZIndex: =3
+
+            TextInput1_1 As text:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =""
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                FocusedBorderColor: =ColorValue(AppTheme.palette.themePrimary)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =ColorValue(AppTheme.palette.themePrimary)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                OnChange: |+
+                    =If(Boolean(ParseJSON(ThisItem.Parameters).multiple),
+                    
+                    If(Self.Text in LookUp(cResult,ID=ThisItem.ID).response,Notify("Duplicate Entries",NotificationType.Warning),
+                    
+                    With({previousInput:LookUp(cResult,ID=ThisItem.ID)},
+                    
+                    Patch(cResult,previousInput,{response:previousInput.response&
+                        "{"&Char(34)&"Val"&Char(34)&":"&Char(34)&Self.Text&Char(34)&"}"});
+                    
+                    With({newInput:LookUp(cResult,ID=ThisItem.ID)},
+                    Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
+                    
+                    )) // End IF already
+                    );Reset(Self),
+                    
+                    Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.Text})
+                    )
+                    
+                    
+                    
+                    
+                    
+                    
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =RGBA(105, 121, 126, 1)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(255, 255, 255, 1)
+                RadiusBottomLeft: =2
+                RadiusBottomRight: =2
+                RadiusTopLeft: =2
+                RadiusTopRight: =2
+                Size: =10.5
+                X: =lblMid_1.X+lblMid_1.Width
+                Y: =lblMid_1.Y+1
+                ZIndex: =4
+
+            vHeightDynamic As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: |-
+                    =//With({aaa:
+                    If(lblBot_1.Visible,lblBot_1.Height,0)+
+                    If(TextInput1_1.Visible,TextInput1_1.Height,0)+
+                    If(lblTop_1.Visible,lblTop_1.Height+lblTop_1.Y,0)
+                    +If(multipleList.Visible,multipleList.Height+5,0)+10
+                    //},If(aaa<40,40,aaa))
+                Visible: =vCommandBar="Show Parameters"
+                Width: =100
+                X: =1000
+                ZIndex: =5
+
+            multipleList As gallery.galleryVertical:
+                AccessibleLabel: =ThisItem.ID
+                BorderColor: =RGBA(166, 166, 166, 1)
+                Fill: =RGBA(255, 255, 255, 1)
+                Height: =RoundUp(CountRows(Self.AllItems)/3,0)*(Self.TemplateHeight+Self.TemplatePadding+5)
+                Items: |-
+                    =//Split(LookUp(cResult,ID=ThisItem.ID).response,",")
+                    
+                    IfError(
+                    ForAll(Table(ParseJSON(
+                        "["&LookUp(cResult,ID=ThisItem.ID).response&"]"))
+                        ,
+                    
+                        {_Val:Text(ThisRecord.Value.Val)}
+                        
+                        ),Blank())
+                Layout: =Layout.Vertical
+                TemplateSize: =35
+                Visible: =If(Text(ParseJSON(ThisItem.Parameters).multiple)="true",true,false)
+                Width: =(listString.Width+10)*3
+                WrapCount: =3
+                X: =58
+                Y: =If(lblBot_1.Visible, lblBot_1.Y+lblBot_1.Height,lblMid_1.Height+lblMid_1.Y)
+                ZIndex: =6
+
+                listString As label:
+                    Align: =Align.Center
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    BorderThickness: =2
+                    Color: =RGBA(51, 51, 51, 1)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledColor: =RGBA(166, 166, 166, 1)
+                    Fill: =ColorValue(AppTheme.palette.white)
+                    FocusedBorderThickness: =4
+                    Font: =Font.'Segoe UI'
+                    Height: =30
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingRight: =listRemove.Width
+                    PaddingTop: =0
+                    Size: =10.5
+                    Text: =ThisItem._Val
+                    Width: =180
+                    Y: =5
+                    ZIndex: =1
+
+                listRemove As icon.Cancel:
+                    BorderColor: =RGBA(166, 166, 166, 1)
+                    Color: =ColorValue(AppTheme.palette.themePrimary)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledColor: =RGBA(220, 220, 220, 1)
+                    DisabledFill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderThickness: =4
+                    Height: =listString.Height
+                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                    HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                    HoverFill: =RGBA(0, 0, 0, 0)
+                    Icon: =Icon.Cancel
+                    OnSelect: |-
+                        =/*With({aaa:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        Patch(cResult,LookUp(cResult,ID=aaa.ID),{
+                            response:Substitute(Substitute(aaa.response,ThisItem.Result,""),"//","/")
+                            }))*/
+                        With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        With({toRemove:"{"&Char(34)&"Val"&Char(34)&":"&Char(34)&ThisItem._Val&Char(34)&"}",
+                            noCommaJSON:Substitute(vResponse.response,"},{","}{")},
+                            
+                            Patch(cResult,vResponse,{response:Substitute(Substitute(noCommaJSON,toRemove,""),"}{","},{")});
+                        
+                        ))
+                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                    PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                    PressedFill: =RGBA(0, 0, 0, 0)
+                    Width: =listString.Height
+                    X: =listString.Width-Self.Width
+                    Y: =listString.Y
+                    ZIndex: =2
+
+            CustomPCFInputTextFormatterControl1 As CustomPCFInputTextFormatterControl:
+                DisplayMode: =DisplayMode.Edit
+                formatTypeProperty: ='CustomPCFInputTextFormatterNamespace.CustomPCFInputTextFormatterControl.formatTypeProperty'.Custom
+                Height: =40
+                InputBoxCssStyleProperty: |-
+                    ="background: #FFFFFF;
+                    /* 1.Basic Colors/Dark Grey */
+                    height: "&Self.Height&"px;
+                    border: 1px solid #B7CBD3;
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    width:"&320&"px;
+                    input:valid {
+                      background-color: yellow;
+                    };
+                    "
+                InputBoxRequiredCssStyleProperty: |-
+                    ="background: #FFFFFF;
+                    /* 1.Basic Colors/Dark Grey */
+                    height: 40px;
+                    border: 1px solid #B7CBD3;
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    width:"&320&"px;
+                    "
+                OnChange: |+
+                    =If(Boolean(ParseJSON(ThisItem.Parameters).multiple),
+                    
+                    If(Self.OutputValue in LookUp(cResult,ID=ThisItem.ID).response,Notify("Duplicate Entries",NotificationType.Warning),
+                    
+                    With({previousInput:LookUp(cResult,ID=ThisItem.ID)},
+                    
+                    Patch(cResult,previousInput,{response:previousInput.response&
+                        "{"&Char(34)&"Val"&Char(34)&":"&Char(34)&Self.OutputValue&Char(34)&"}"});
+                    
+                    With({newInput:LookUp(cResult,ID=ThisItem.ID)},
+                    Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
+                    
+                    )) // End IF already
+                    )
+                    //;Reset(Self)
+                    ,
+                    
+                    Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.OutputValue})
+                    )
+                    
+                    
+                    
+                    
+                    
+                    
+                OutputValue: =
+                Visible: =false
+                Width: =200
+                X: =lblMid_1.X+lblMid_1.Width
+                Y: =0
+                ZIndex: =7
+
+        inputSubForm As gallery.galleryVertical:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(253, 222, 207, 1)
+            Height: =70
+            Items: =ThisItem
+            Layout: =Layout.Vertical
+            TemplateSize: =Self.Height-10
+            Visible: |
+                =And(First(Self.AllItems).InputType.Value="SubForm",vVisible.Text="true")
+            Width: =inputString.Width
+            ZIndex: =6
+
+            Button1_3 As button:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(105, 121, 126, 1)
+                FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                OnSelect: |-
+                    =ClearCollect(cSubForm,{});Clear(cSubForm);
+                    With({formId:Value(ParseJSON(ThisItem.Parameters).formId)},
+                    ForAll(ForAll(Split(LookUp(Forms,ID=formId).Questions,","), {Result: ThisRecord.Value}),
+                    With({vId:Value(Result)},
+                    Collect(cSubForm,LookUp(Questions,ID=vId))
+                    )));
+                    UpdateContext({showSubForm:true,parentQuestion:ThisItem})
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =15
+                Text: ="Button"
+                X: =348
+                ZIndex: =1
+
+            Label2_1 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: =ThisItem.Name
+                Width: =348
+                ZIndex: =2
+
+            Label2_2 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: =Value(ParseJSON(ThisItem.Parameters).formId)
+                Width: =348
+                X: =534
+                ZIndex: =3
+
+        "inputPersonPicker As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
+            AccessibleLabel: =
+            BorderColor: =RGBA(166, 166, 166, 1)
+            Height: |-
+                =//Value(First(Self.AllItems).vHeightDynamic_2.Text)
+                200
+            Items: =ThisItem
+            Layout: =Layout.Vertical
+            ShowScrollbar: =false
+            TemplatePadding: =0
+            TemplateSize: |-
+                =//lblBot_1.Height+lblMid_1.Height+lblTop_1.Height
+                100
+            Transition: =Transition.Push
+            Visible: =First(Self.AllItems).InputType.Value="PersonPicker"
+            Width: =Parent.Width
+            ZIndex: =7
+
+            lblTop_2 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =1
+                HtmlText: =ThisItem.Top
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =Parent.Width
+                ZIndex: =1
+
+            lblMid_2 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =1
+                HtmlText: ="<b>"&ThisItem.Name&"</b>"
+                OnSelect: =Select(Parent)
+                Width: |
+                    =300
+                ZIndex: =2
+
+            lblBot_2 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =1
+                HtmlText: =ThisItem.Bot
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =Parent.Width
+                X: |
+                    =0
+                ZIndex: =3
+
+            vHeightDynamic_2 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: |-
+                    =If(lblBot_2.Visible,lblBot_2.Height,0)+
+                    If(lblMid_2.Visible,lblMid_2.Height,0)
+                    +If(lblTop_2.Visible,lblTop_2.Height+lblTop_2.Y,0)+10
+                Visible: =vCommandBar="Show Parameters"
+                Width: =100
+                X: =1000
+                ZIndex: =6
+
+            "PeoplePicker1_1 As 'Fluent PeoplePicker (1.0.19) Preview'.pcfdataset":
+                DisplayMode: =DisplayMode.Edit
+                Height: |-
+                    =//40+RoundUp(CountRows(PeoplePicker1_1.SelectedPeople)/2,0)*30
+                    80
+                Items: =PreSelectedUserCollection
+                OnChange: |-
+                    =With({vResponse:
+                    
+                    If(CountRows(Self.SelectedPeople)=1,
+                    First(Self.SelectedPeople).PersonaName,
+                    Left(Concat(Self.SelectedPeople,PersonaName&","),Len(Concat(Self.SelectedPeople,PersonaName&","))-1))
+                    },
+                    
+                    Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:vResponse}))
+                OnSearch: |-
+                    =ClearCollect(
+                        UserCollection,
+                        AddColumns(
+                            Office365Users.SearchUser(
+                                {
+                                    searchTerm: Self.SearchText,
+                                    top: 500
+                                }
+                            ),
+                            "ImageURL",
+                            Substitute(
+                                JSON(
+                                    Office365Users.UserPhotoV2(Id),
+                                    JSONFormat.IncludeBinaryData
+                                ),
+                                """",
+                                ""
+                            ),
+                    		"Presence",
+                    		"away"
+                        )
+                    )
+                PeoplePickerType: ='PowerCAT.PeoplePicker.PeoplePickerType'.ListPeoplePicker
+                SuggestionImgUrl: ="ImageURL"
+                SuggestionKey: ="Mail"
+                SuggestionName: ="DisplayName"
+                SuggestionRole: ="JobTitle"
+                Suggestions_Items: =UserCollection
+                Theme: =AppThemeJson2
+                Visible: =true
+                Width: =320
+                X: =lblMid_2.Width
+                Y: =0
+                ZIndex: =7
+
+            "SearchBox1_1 As 'Fluent SearchBox (1.0.19) Preview'":
+                DisplayMode: =DisplayMode.Edit
+                Height: =1
+                Theme: =AppThemeJson2
+                Visible: =false
+                Width: =482
+                X: =lblMid_2.Width
+                Y: =0
+                ZIndex: =8
+
+        inputRadioList As gallery.galleryVertical:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            DelayItemLoading: =true
+            Items: =ThisItem
+            Layout: =Layout.Vertical
+            LoadingSpinner: =LoadingSpinner.Data
+            TemplateSize: =vHeightDynamic_3.Height
+            Visible: =First(Self.AllItems).InputType.Value="RadioButtonList"
+            Width: =Parent.Width
+            ZIndex: =14
+
+            glrRadioList As gallery.galleryVertical:
+                AccessibleLabel: =ThisItem.ID
+                BorderColor: =RGBA(166, 166, 166, 1)
+                DelayItemLoading: =true
+                Height: =RoundUp(CountRows(Self.AllItems)/2,0)*(Self.TemplateHeight+Self.TemplatePadding+5)
+                Items: |-
+                    =ForAll( Table( ParseJSON( TextInput1.Text ) ), { id: Value(ThisRecord.Value.id), name: Text(ThisRecord.Value.name) } )
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                OnSelect: |-
+                    =Patch(cResult,LookUp(cResult,ID=Value(Parent.AccessibleLabel)),{response:ThisItem.name})
+                TemplateSize: =Max(Self.AllItems,Label2_3.Text)
+                Width: =Parent.Width
+                WrapCount: =2
+                Y: =lblMid_3.Y+lblMid_3.Height
+                ZIndex: =1
+
+                "radioListButton_1 As 'Fluent Icon (1.0.19)'":
+                    DisplayMode: =DisplayMode.Edit
+                    Height: =31
+                    IconName: =If(LookUp(cResult,ID=Value(Parent.AccessibleLabel)).response=ThisItem.name,"RadioBtnOn","RadioBtnOff")
+                    IconSize: =28
+                    IconType: ='PowerCAT.Icon.IconType'.ActionButton
+                    OnChange: =Select(Parent)
+                    TextAlignment: ='PowerCAT.Icon.TextAlignment'.Center
+                    Theme: =AppThemeJson
+                    Width: =31
+                    X: =0
+                    Y: =0
+                    ZIndex: =1
+
+                radioListLabel_1 As Label:
+                    AutoHeight: =true
+                    DisplayMode: =DisplayMode.Edit
+                    FontWeight: =FontWeight.Semibold
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    PaddingStart: |
+                        =5
+                    Text: =ThisItem.name
+                    Width: =((Parent.Width/2)-Self.X)/12*11
+                    X: =31
+                    Y: =0
+                    ZIndex: =2
+
+                Label2_3 As label:
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    BorderThickness: =2
+                    Color: =RGBA(51, 51, 51, 1)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledColor: =RGBA(166, 166, 166, 1)
+                    FocusedBorderThickness: =4
+                    Font: =Font.'Segoe UI'
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    Size: =13
+                    Text: =radioListLabel_1.Height
+                    Visible: =false
+                    Width: =0
+                    X: =385.6666666666667
+                    ZIndex: =3
+
+            lblTop_3 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Top
+                OnSelect: =Select(Parent)
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =699
+                ZIndex: =2
+
+            lblMid_3 As htmlViewer:
+                Fill: =RGBA(0, 0, 0, 0)
+                Font: =Font.'Segoe UI'
+                Height: =45
+                HtmlText: ="<b>"&ThisItem.Name&"</b>"
+                OnSelect: =Select(Parent)
+                Width: |
+                    =300
+                Y: |-
+                    =If(lblTop_3.Visible,
+                    lblTop_3.Height+lblTop_3.Y,0)
+                ZIndex: =3
+
+            lblBot_3 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Bot
+                OnSelect: =Select(Parent)
+                Visible: =false
+                Width: =699
+                X: |
+                    =0
+                Y: =DatePicker1_2.Height+DatePicker1_2.Y
+                ZIndex: =4
+
+            vHeightDynamic_3 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                OnSelect: =Select(Parent)
+                Size: =13
+                Text: |-
+                    =If(lblBot.Visible,lblBot.Height,0)+
+                    glrRadioList.Height+
+                    If(lblTop.Visible,lblTop.Height+lblTop.Y,0)+10
+                Visible: =vCommandBar="Show Parameters"
+                Width: =50
+                X: =649
+                Y: =40
+                ZIndex: =5
+
+    Group1 As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =16
+
+        "Elevation1_7 As 'Fluent Elevation (1.0.19)'":
+            DarkOverlay: =true
+            Depth: ='PowerCAT.Elevation.Depth'.Depth4
+            DisplayMode: =DisplayMode.Edit
+            FillColor: |-
+                ="#ffffff"
+            Height: =45
+            Width: =709
+            X: =382
+            Y: =15
+            ZIndex: =1
+
+        "Elevation1_6 As 'Fluent Elevation (1.0.19)'":
+            DarkOverlay: =true
+            Depth: ='PowerCAT.Elevation.Depth'.Depth4
+            DisplayMode: =DisplayMode.Edit
+            FillColor: |-
+                ="#ffffff"
+            Height: =970
+            Width: =dynamicForm.Width
+            X: =382
+            Y: =80
+            ZIndex: =2
+
+        "Elevation1_5 As 'Fluent Elevation (1.0.19)'":
+            DarkOverlay: =true
+            Depth: ='PowerCAT.Elevation.Depth'.Depth4
+            DisplayMode: =DisplayMode.Edit
+            FillColor: |-
+                ="#ffffff"
+            Height: =970
+            OnChange: =
+            Width: =330
+            X: =20
+            Y: =80
+            ZIndex: =3
+
+        Label1_26 As Label:
+            Alignment: =Align.Center
+            Color: =ColorValue(AppTheme.palette.themePrimary)
+            DisplayMode: =DisplayMode.Edit
+            FontSize: =28
+            FontWeight: =FontWeight.Semibold
+            Height: =80
+            Text: ="Forms Fabric"
+            Width: =330
+            X: =20
+            Y: =0
+            ZIndex: =4
+
+        "Nav1_1 As 'Fluent Nav (1.0.19)'.pcfdataset":
+            DisplayMode: =DisplayMode.Edit
+            Height: =925
+            Items: =barNav
+            OnChange: |
+                =UpdateContext({showLoadingForm:true});
+                ClearCollect(cQuestions,{});Clear(cQuestions);
+                ClearCollect(cResult,{});Clear(cResult);
+                
+                ForAll(ForAll(Split(
+                    LookUp(Forms,Title=Self.Selected.ItemDisplayName).Questions
+                    ,","), {Result: ThisRecord.Value}),
+                With({vId:Value(Result)},
+                Collect(cQuestions,LookUp(Questions,ID=vId));
+                Collect(cResult,{ID:vId,response:"",savedName:LookUp(cQuestions,ID=vId).SavedName})
+                ));
+                UpdateContext({showLoadingForm:false});
+            SelectedKey: ="1"
+            Theme: =AppThemeJson3
+            Width: =291
+            X: =40
+            Y: =103
+            ZIndex: =5
+
+        "CommandBar1_1 As 'Fluent Command Bar (1.0.19)'.pcfdataset":
+            DisplayMode: =DisplayMode.Edit
+            Height: =45
+            Items: |-
+                = Table({ItemKey: "Show Result",ItemDisplayName: "Show Result",ItemIconName: "InboxCheck"},
+                
+                          {ItemKey: "Show Parameters",ItemDisplayName: "Show Parameters",ItemIconName: "Parameter"},
+                          {ItemKey: "Show Variables",ItemDisplayName: "Show Variables",ItemIconName: "Variable"},
+                          {ItemKey: "Hide",ItemDisplayName: "Hide",ItemIconName: "Hide"}
+                    )
+            OnSelect: |-
+                =UpdateContext({vCommandBar:Self.Selected.ItemDisplayName})
+            Theme: =AppThemeJson
+            Tooltip: =""
+            Width: =711
+            X: =1156
+            Y: =15
+            ZIndex: =6
+
+        Label1_11 As Label:
+            Color: =ColorValue(AppTheme.palette.neutralPrimary)
+            DisplayMode: =DisplayMode.Edit
+            FontSize: =14
+            FontWeight: =FontWeight.Semibold
+            Height: =45
+            Text: =Nav1_1.Selected.ItemDisplayName
+            Width: =690
+            X: =401
+            Y: =15
+            ZIndex: =7
+
+        Label1_12 As Label:
+            Color: =ColorValue(AppTheme.palette.neutralPrimary)
+            DisplayMode: =DisplayMode.Edit
+            FontSize: =14
+            FontWeight: =FontWeight.Semibold
+            Height: =50
+            Text: =vCommandBar
+            Visible: =Or(glrGlobalVariable.Visible,glrResult.Visible)
+            Width: =640
+            X: =1156
+            Y: =80
+            ZIndex: =8
+
+        "Spinner1_1 As 'Fluent Spinner (1.0.19) Preview'":
+            DisplayMode: =DisplayMode.Edit
+            Height: =970
+            Label: ="Loading..."
+            LabelPosition: ='PowerCAT.Spinner.LabelPosition'.Bottom
+            SpinnerAlignment: ='PowerCAT.Spinner.SpinnerAlignment'.Center
+            SpinnerSize: ='PowerCAT.Spinner.SpinnerSize'.Large
+            Theme: =AppThemeJson2
+            Visible: =And(showLoadingForm,Nav1_1.SelectedKey<>"")
+            Width: =709
+            X: =382
+            Y: =80
+            ZIndex: =13
+
+        Label16 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            Size: =13
+            Text: ="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"
+            X: =1770
+            ZIndex: =15
+
