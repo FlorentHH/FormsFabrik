@@ -303,16 +303,16 @@ FormFabric As screen:
             ZIndex: =1
         
         inputRadioList As gallery.galleryVertical:
-        BorderColor: =RGBA(166, 166, 166, 1)
-        DelayItemLoading: =true
-        Items: =First(CustomGallerySample)
-        Layout: =Layout.Vertical
-        LoadingSpinner: =LoadingSpinner.Data
-        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-        Width: =1187
-        X: =733
-        Y: =505
-        ZIndex: =14
+            BorderColor: =RGBA(166, 166, 166, 1)
+            DelayItemLoading: =true
+            Items: =First(CustomGallerySample)
+            Layout: =Layout.Vertical
+            LoadingSpinner: =LoadingSpinner.Data
+            TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+            Width: =1187
+            X: =733
+            Y: =505
+            ZIndex: =14
 
         Gallery2_1 As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
