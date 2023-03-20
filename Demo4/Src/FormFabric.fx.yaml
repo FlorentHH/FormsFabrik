@@ -624,6 +624,32 @@ FormFabric As screen:
             Visible: =First(Self.AllItems).InputType.Value="PersonPicker"
             Width: =Parent.Width
             ZIndex: =7
+            
+            PersonPickerSelected As gallery.galleryVertical:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                DelayItemLoading: =true
+                Height: =77
+                Items: =CustomGallerySample
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+                Width: =605
+                X: =1209
+                Y: =255
+                ZIndex: =14
+
+            PersonPickerList As gallery.galleryVertical:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                DelayItemLoading: =true
+                Height: =77
+                Items: =CustomGallerySample
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
+                Width: =605
+                X: =1191
+                Y: =178
+                ZIndex: =15
 
             lblTop_2 As htmlViewer:
                 AutoHeight: =true
@@ -869,31 +895,7 @@ FormFabric As screen:
                 Y: =40
                 ZIndex: =5
 
-    PersonPickerSelected As gallery.galleryVertical:
-        BorderColor: =RGBA(166, 166, 166, 1)
-        DelayItemLoading: =true
-        Height: =77
-        Items: =CustomGallerySample
-        Layout: =Layout.Vertical
-        LoadingSpinner: =LoadingSpinner.Data
-        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-        Width: =605
-        X: =1209
-        Y: =255
-        ZIndex: =14
-
-    PersonPickerList As gallery.galleryVertical:
-        BorderColor: =RGBA(166, 166, 166, 1)
-        DelayItemLoading: =true
-        Height: =77
-        Items: =CustomGallerySample
-        Layout: =Layout.Vertical
-        LoadingSpinner: =LoadingSpinner.Data
-        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(280, Self.Width - 60), Min(280, Self.Height - 60))
-        Width: =605
-        X: =1191
-        Y: =178
-        ZIndex: =15
+    
 
     Group1 As group:
         Height: =5
