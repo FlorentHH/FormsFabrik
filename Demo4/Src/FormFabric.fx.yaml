@@ -179,7 +179,12 @@ FormFabric As screen:
                 LookUp(cResult,ID=parentID).response
                 ))),Value)}, // ici ça serait un lookup de la réponse du parent
                 !IsBlank(Find("true",conditionAny))
-                ),true)
+                )
+                
+                
+                
+                
+                ,true)
             Visible: =vCommandBar="Show Parameters"
             X: =1100
             ZIndex: =1
@@ -825,7 +830,8 @@ FormFabric As screen:
                 DelayItemLoading: =true
                 Height: =RoundUp(CountRows(Self.AllItems)/2,0)*(Self.TemplateHeight+Self.TemplatePadding+5)
                 Items: |-
-                    =ForAll( Table( ParseJSON( TextInput1.Text ) ), { id: Value(ThisRecord.Value.id), name: Text(ThisRecord.Value.name) } )
+                    =IfError(
+                    ForAll( Table( ParseJSON( ThisItem.Parameters ) ), { id: Value(ThisRecord.Value.id), name: Text(ThisRecord.Value.name) } ),Blank())
                 Layout: =Layout.Vertical
                 LoadingSpinner: =LoadingSpinner.Data
                 OnSelect: |-
