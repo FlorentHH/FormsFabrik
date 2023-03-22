@@ -812,7 +812,7 @@ FormFabric As screen:
                 Y: =lblMid_1.Y+1
                 ZIndex: =16
 
-            listRemove_1 As icon.Cancel:
+            listRemove666 As icon.Cancel:
                 BorderColor: =RGBA(166, 166, 166, 1)
                 Color: =ColorValue(AppTheme.palette.themePrimary)
                 DisabledBorderColor: =RGBA(0, 0, 0, 0)
