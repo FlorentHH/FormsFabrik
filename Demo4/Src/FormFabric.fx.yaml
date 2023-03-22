@@ -782,6 +782,38 @@ FormFabric As screen:
                     Text: =ThisItem.DisplayName
                     Width: =Parent.Width/2-10
                     ZIndex: =1
+                
+                listRemove777 As icon.Cancel:
+                    BorderColor: =RGBA(166, 166, 166, 1)
+                    Color: =ColorValue(AppTheme.palette.themePrimary)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledColor: =RGBA(220, 220, 220, 1)
+                    DisabledFill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderThickness: =4
+                    Height: =listString.Height
+                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                    HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                    HoverFill: =RGBA(0, 0, 0, 0)
+                    Icon: =Icon.Cancel
+                    OnSelect: |-
+                        =/*With({aaa:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        Patch(cResult,LookUp(cResult,ID=aaa.ID),{
+                            response:Substitute(Substitute(aaa.response,ThisItem.Result,""),"//","/")
+                            }))*/
+                        With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        With({toRemove:"{"&Char(34)&"Val"&Char(34)&":"&Char(34)&ThisItem._Val&Char(34)&"}",
+                            noCommaJSON:Substitute(vResponse.response,"},{","}{")},
+                            
+                            Patch(cResult,vResponse,{response:Substitute(Substitute(noCommaJSON,toRemove,""),"}{","},{")});
+                        
+                        ))
+                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                    PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                    PressedFill: =RGBA(0, 0, 0, 0)
+                    Width: =listString.Height
+                    X: =listString.Width-Self.Width
+                    Y: =listString.Y
+                    ZIndex: =17
 
             TextInput1111 As text:
                 BorderColor: =RGBA(166, 166, 166, 1)
@@ -812,37 +844,7 @@ FormFabric As screen:
                 Y: =lblMid_1.Y+1
                 ZIndex: =16
 
-            listRemove666 As icon.Cancel:
-                BorderColor: =RGBA(166, 166, 166, 1)
-                Color: =ColorValue(AppTheme.palette.themePrimary)
-                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                DisabledColor: =RGBA(220, 220, 220, 1)
-                DisabledFill: =RGBA(0, 0, 0, 0)
-                FocusedBorderThickness: =4
-                Height: =listString.Height
-                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
-                HoverFill: =RGBA(0, 0, 0, 0)
-                Icon: =Icon.Cancel
-                OnSelect: |-
-                    =/*With({aaa:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
-                    Patch(cResult,LookUp(cResult,ID=aaa.ID),{
-                        response:Substitute(Substitute(aaa.response,ThisItem.Result,""),"//","/")
-                        }))*/
-                    With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
-                    With({toRemove:"{"&Char(34)&"Val"&Char(34)&":"&Char(34)&ThisItem._Val&Char(34)&"}",
-                        noCommaJSON:Substitute(vResponse.response,"},{","}{")},
-                        
-                        Patch(cResult,vResponse,{response:Substitute(Substitute(noCommaJSON,toRemove,""),"}{","},{")});
-                    
-                    ))
-                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
-                PressedFill: =RGBA(0, 0, 0, 0)
-                Width: =listString.Height
-                X: =listString.Width-Self.Width
-                Y: =listString.Y
-                ZIndex: =17
+            
 
         inputRadioList As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
