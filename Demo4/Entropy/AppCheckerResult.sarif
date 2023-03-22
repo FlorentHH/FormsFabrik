@@ -1911,19 +1911,19 @@
             {
               "logicalLocations": [
                 {
-                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2.AccessibleLabel"
+                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1111.AccessibleLabel"
                 }
               ],
               "physicalLocation": {
                 "address": {
-                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2.AccessibleLabel",
+                  "fullyQualifiedName": "FormFabric.dynamicForm.inputPersonPicker.TextInput1111.AccessibleLabel",
                   "relativeAddress": 0
                 }
               },
               "properties": {
                 "member": "AccessibleLabel",
                 "module": "FormFabric",
-                "type": "FormFabric.dynamicForm.inputPersonPicker.TextInput1_2"
+                "type": "FormFabric.dynamicForm.inputPersonPicker.TextInput1111"
               }
             }
           ],

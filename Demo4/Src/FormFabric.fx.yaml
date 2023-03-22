@@ -714,7 +714,7 @@ FormFabric As screen:
                 WrapCount: =2
                 X: |
                     =10
-                Y: =TextInput1_2.Y+TextInput1_2.Height+10+If(PersonPickerList.Visible,PersonPickerList.Height+10,0)
+                Y: =TextInput1111.Y+TextInput1111.Height+10+If(PersonPickerList.Visible,PersonPickerList.Height+10,0)
                 ZIndex: =14
 
                 Label17 As label:
@@ -742,15 +742,15 @@ FormFabric As screen:
                 DelayItemLoading: =true
                 Height: =75
                 Items: |-
-                    =If(!IsBlank(Trim(TextInput1_2.Text)), Office365Users.SearchUser({searchTerm: Trim(TextInput1_2.Text), top: 4}))
+                    =If(!IsBlank(Trim(TextInput1111.Text)), Office365Users.SearchUser({searchTerm: Trim(TextInput1111.Text), top: 4}))
                 Layout: =Layout.Vertical
                 LoadingSpinner: =LoadingSpinner.Data
                 TemplateSize: =30
-                Visible: =!IsBlank(TextInput1_2.Text)
+                Visible: =!IsBlank(TextInput1111.Text)
                 Width: =Parent.Width-Self.X-30
                 WrapCount: =2
                 X: =10
-                Y: =TextInput1_2.Y+TextInput1_2.Height+10
+                Y: =TextInput1111.Y+TextInput1111.Height+10
                 ZIndex: =15
 
                 Label9 As label:
@@ -777,13 +777,13 @@ FormFabric As screen:
                         Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
                         
                         )) // End IF already
-                        );Reset(TextInput1_2)
+                        );Reset(TextInput1111)
                     Size: =10.5
                     Text: =ThisItem.DisplayName
                     Width: =Parent.Width/2-10
                     ZIndex: =1
 
-            TextInput1_2 As text:
+            TextInput1111 As text:
                 BorderColor: =RGBA(166, 166, 166, 1)
                 Color: =RGBA(51, 51, 51, 1)
                 Default: =""
