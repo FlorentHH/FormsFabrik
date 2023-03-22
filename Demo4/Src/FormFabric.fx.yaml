@@ -689,12 +689,11 @@ FormFabric As screen:
                 ZIndex: =6
 
             PersonPickerSelected As gallery.galleryVertical:
+                AccessibleLabel: =ThisItem.ID
                 BorderColor: =RGBA(166, 166, 166, 1)
                 BorderThickness: =1
                 DelayItemLoading: =true
-                Height: |-
-                    =//RoundUp(CountRows(Self.AllItems)/2,0)*41
-                    100
+                Height: =RoundUp(CountRows(Self.AllItems)/2,0)*41
                 Items: |-
                     =IfError(
                     ForAll(Table(ParseJSON(
@@ -742,18 +741,14 @@ FormFabric As screen:
                     DisabledColor: =RGBA(220, 220, 220, 1)
                     DisabledFill: =RGBA(0, 0, 0, 0)
                     FocusedBorderThickness: =4
-                    Height: =listString.Height
+                    Height: =30
                     HoverBorderColor: =RGBA(0, 0, 0, 0)
                     HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
                     HoverFill: =RGBA(0, 0, 0, 0)
                     Icon: =Icon.Cancel
                     OnSelect: |-
-                        =/*With({aaa:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
-                        Patch(cResult,LookUp(cResult,ID=aaa.ID),{
-                            response:Substitute(Substitute(aaa.response,ThisItem.Result,""),"//","/")
-                            }))*/
-                        With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
-                        With({toRemove:"{"&Char(34)&"Val"&Char(34)&":"&Char(34)&ThisItem._Val&Char(34)&"}",
+                        =With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        With({toRemove:"{"&Char(34)&"fullName"&Char(34)&":"&Char(34)&ThisItem.fullName&Char(34)&"}",
                             noCommaJSON:Substitute(vResponse.response,"},{","}{")},
                             
                             Patch(cResult,vResponse,{response:Substitute(Substitute(noCommaJSON,toRemove,""),"}{","},{")});
@@ -762,9 +757,11 @@ FormFabric As screen:
                     PressedBorderColor: =RGBA(0, 0, 0, 0)
                     PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
                     PressedFill: =RGBA(0, 0, 0, 0)
-                    Width: =listString.Height
-                    X: =listString.Width-Self.Width
-                    Y: =listString.Y
+                    Width: |
+                        =30
+                    X: =Label17.Width-Self.Width
+                    Y: |
+                        =0
                     ZIndex: =17
 
             PersonPickerList As gallery.galleryVertical:
