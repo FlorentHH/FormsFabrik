@@ -692,9 +692,18 @@ FormFabric As screen:
                 BorderColor: =RGBA(166, 166, 166, 1)
                 BorderThickness: =1
                 DelayItemLoading: =true
-                Height: =RoundUp(CountRows(Self.AllItems)/2,0)*37
+                Height: |-
+                    =//RoundUp(CountRows(Self.AllItems)/2,0)*41
+                    100
                 Items: |-
-                    =[{val:"aaa"},{val:"aaa"},{val:"aaa"},{val:"aaa"},{val:"aaa"}]
+                    =IfError(
+                    ForAll(Table(ParseJSON(
+                        "["&LookUp(cResult,ID=ThisItem.ID).response&"]"))
+                        ,
+                    
+                        {fullName:Text(ThisRecord.Value.fullName)}
+                        
+                        ),Blank())
                 Layout: =Layout.Vertical
                 LoadingSpinner: =LoadingSpinner.Data
                 TemplateSize: |
@@ -721,12 +730,13 @@ FormFabric As screen:
                     Height: =30
                     OnSelect: =Select(Parent)
                     Size: =10.5
-                    Text: =ThisItem.val
+                    Text: =ThisItem.fullName
                     Width: |
                         =Parent.Width/2-10
                     ZIndex: =1
 
             PersonPickerList As gallery.galleryVertical:
+                AccessibleLabel: =ThisItem.ID
                 BorderColor: =RGBA(166, 166, 166, 1)
                 BorderThickness: =1
                 DelayItemLoading: =true
@@ -755,9 +765,21 @@ FormFabric As screen:
                     Font: =Font.'Segoe UI'
                     Height: =30
                     HoverBorderColor: =ColorValue(AppTheme.palette.themePrimary)
-                    OnSelect: =Select(Parent)
+                    OnSelect: |-
+                        =If(Self.Text in LookUp(cResult,ID=Value(Parent.AccessibleLabel)).response,Notify("Duplicate Entries",NotificationType.Warning),
+                        
+                        With({previousInput:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        
+                        Patch(cResult,previousInput,{response:previousInput.response&
+                            "{"&Char(34)&"fullName"&Char(34)&":"&Char(34)&Self.Text&Char(34)&"}"});
+                        
+                        With({newInput:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                        Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
+                        
+                        )) // End IF already
+                        );Reset(TextInput1_2)
                     Size: =10.5
-                    Text: =ThisItem.UserPrincipalName
+                    Text: =ThisItem.DisplayName
                     Width: =Parent.Width/2-10
                     ZIndex: =1
 
@@ -774,30 +796,7 @@ FormFabric As screen:
                 HoverBorderColor: =ColorValue(AppTheme.palette.themePrimary)
                 HoverColor: =RGBA(51, 51, 51, 1)
                 HoverFill: =RGBA(255, 255, 255, 1)
-                OnChange: |+
-                    =If(Boolean(ParseJSON(ThisItem.Parameters).multiple),
-                    
-                    If(Self.Text in LookUp(cResult,ID=ThisItem.ID).response,Notify("Duplicate Entries",NotificationType.Warning),
-                    
-                    With({previousInput:LookUp(cResult,ID=ThisItem.ID)},
-                    
-                    Patch(cResult,previousInput,{response:previousInput.response&
-                        "{"&Char(34)&"Val"&Char(34)&":"&Char(34)&Self.Text&Char(34)&"}"});
-                    
-                    With({newInput:LookUp(cResult,ID=ThisItem.ID)},
-                    Patch(cResult,newInput,{response:Substitute(newInput.response,"}{","},{")})
-                    
-                    )) // End IF already
-                    );Reset(Self),
-                    
-                    Patch(cResult,LookUp(cResult,ID=ThisItem.ID),{response:Self.Text})
-                    )
-                    
-                    
-                    
-                    
-                    
-                    
+                OnChange: =
                 OnSelect: =Select(Parent)
                 PressedBorderColor: =RGBA(105, 121, 126, 1)
                 PressedColor: =RGBA(51, 51, 51, 1)
@@ -812,6 +811,38 @@ FormFabric As screen:
                 X: =lblMid_1.X+lblMid_1.Width
                 Y: =lblMid_1.Y+1
                 ZIndex: =16
+
+            listRemove_1 As icon.Cancel:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                Color: =ColorValue(AppTheme.palette.themePrimary)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(220, 220, 220, 1)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =4
+                Height: =listString.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Icon: =Icon.Cancel
+                OnSelect: |-
+                    =/*With({aaa:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                    Patch(cResult,LookUp(cResult,ID=aaa.ID),{
+                        response:Substitute(Substitute(aaa.response,ThisItem.Result,""),"//","/")
+                        }))*/
+                    With({vResponse:LookUp(cResult,ID=Value(Parent.AccessibleLabel))},
+                    With({toRemove:"{"&Char(34)&"Val"&Char(34)&":"&Char(34)&ThisItem._Val&Char(34)&"}",
+                        noCommaJSON:Substitute(vResponse.response,"},{","}{")},
+                        
+                        Patch(cResult,vResponse,{response:Substitute(Substitute(noCommaJSON,toRemove,""),"}{","},{")});
+                    
+                    ))
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Width: =listString.Height
+                X: =listString.Width-Self.Width
+                Y: =listString.Y
+                ZIndex: =17
 
         inputRadioList As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
