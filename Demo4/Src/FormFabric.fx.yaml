@@ -21,7 +21,9 @@ FormFabric As screen:
         ,{type:"screenStatus",value:"Edit"}
         ,{type:"subFormId",value:""}
         ,{type:"subFormName",value:""}
+        ,{type:"subFormQuestionId",value:""}
         ,{type:"showSubForm",value:""}
+        
         );
         
         
@@ -645,6 +647,7 @@ FormFabric As screen:
                     Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"true"});
                     Patch(globalVariable,LookUp(globalVariable,type="subFormName"),{value:LookUp(Forms,ID=formID).Title});
                     Patch(globalVariable,LookUp(globalVariable,type="subFormId"),{value:formID});
+                    Patch(globalVariable,LookUp(globalVariable,type="subQuestionId"),{value:ThisItem.ID});
                     
                     ));
                     
@@ -1239,4 +1242,27 @@ FormFabric As screen:
             X: =382
             Y: =80
             ZIndex: =12
+
+    vResultJSON As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(255, 255, 255, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        Height: =155
+        Size: =13
+        Text: |-
+            ="["&
+            Substitute(
+            Concat(cResult,"{"&Char(34)&savedName&Char(34)&":"&Char(34)&response&Char(34)&"}"),
+            "}{","},{")
+            &"]"
+        Width: =640
+        X: =1156
+        Y: =737
+        ZIndex: =17
 
