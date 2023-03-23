@@ -631,14 +631,14 @@ FormFabric As screen:
                 Height: =32
                 OnSelect: |-
                     =UpdateContext({showLoadingForm:true});
-                    With({formID:Text(ParseJSON(ThisItem.Parameters).formId)},
+                    With({formID:Value(ParseJSON(ThisItem.Parameters).formId)},
                     
                     
                     ClearCollect(cQuestionsBuffer,cQuestions);Clear(cQuestions);
                     ClearCollect(cResultBuffer,cResult);Clear(cResult);
                     
                     ForAll(ForAll(Split(
-                        LookUp(Forms,ID=Value(formID)).Questions
+                        LookUp(Forms,ID=formID).Questions
                         ,","), {Result: ThisRecord.Value}),
                     With({vId:Value(Result)},
                     Collect(cQuestions,LookUp(Questions,ID=vId));
@@ -647,7 +647,7 @@ FormFabric As screen:
                     Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"true"});
                     Patch(globalVariable,LookUp(globalVariable,type="subFormName"),{value:LookUp(Forms,ID=formID).Title});
                     Patch(globalVariable,LookUp(globalVariable,type="subFormId"),{value:formID});
-                    Patch(globalVariable,LookUp(globalVariable,type="subQuestionId"),{value:ThisItem.ID});
+                    Patch(globalVariable,LookUp(globalVariable,type="subFormQuestionId"),{value:ThisItem.ID});
                     
                     ));
                     
@@ -1064,6 +1064,17 @@ FormFabric As screen:
         HoverColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
         HoverFill: =RGBA(0, 0, 0, 0)
         Icon: =Icon.Save
+        OnSelect: |-
+            =UpdateContext({showLoadingForm:true});
+            With({qId:LookUp(globalVariable,type="subFormQuestionId").value},
+            Patch(cResultBuffer,LookUp(cResultBuffer,ID=Value(qId)),{response:vResultJSON.Text});
+            Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"false"});
+            ClearCollect(cResult,cResultBuffer);Clear(cResultBuffer);
+            ClearCollect(cQuestions,cQuestionsBuffer);Clear(cQuestionsBuffer);
+            
+            UpdateContext({showLoadingForm:false});
+            
+            )
         PressedBorderColor: =RGBA(0, 0, 0, 0)
         PressedColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
         PressedFill: =RGBA(0, 0, 0, 0)
@@ -1261,6 +1272,7 @@ FormFabric As screen:
             Concat(cResult,"{"&Char(34)&savedName&Char(34)&":"&Char(34)&response&Char(34)&"}"),
             "}{","},{")
             &"]"
+        Visible: =vCommandBar="Show Result"
         Width: =640
         X: =1156
         Y: =737
