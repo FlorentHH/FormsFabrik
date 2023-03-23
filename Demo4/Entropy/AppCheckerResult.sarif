@@ -3064,36 +3064,6 @@
           },
           "ruleId": "app-ScreenHasManyControls",
           "ruleIndex": 7
-        },
-        {
-          "locations": [
-            {
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "FormFabric.parentQuestion"
-                }
-              ],
-              "physicalLocation": {
-                "address": {
-                  "fullyQualifiedName": "FormFabric.parentQuestion",
-                  "relativeAddress": 0
-                }
-              },
-              "properties": {
-                "member": "parentQuestion",
-                "module": "FormFabric",
-                "type": "FormFabric"
-              }
-            }
-          ],
-          "message": {
-            "id": "issue"
-          },
-          "properties": {
-            "level": "Medium"
-          },
-          "ruleId": "app-UnusedVariables",
-          "ruleIndex": 6
         }
       ],
       "tool": {

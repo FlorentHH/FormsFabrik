@@ -21,6 +21,7 @@ FormFabric As screen:
         ,{type:"screenStatus",value:"Edit"}
         ,{type:"subFormId",value:""}
         ,{type:"subFormName",value:""}
+        ,{type:"subFormResponse",value:""}
         ,{type:"subFormQuestionId",value:""}
         ,{type:"showSubForm",value:""}
         
@@ -124,7 +125,7 @@ FormFabric As screen:
         BorderColor: =RGBA(166, 166, 166, 1)
         DelayItemLoading: =true
         Height: =935
-        Items: =If(showSubForm,cSubForm,cQuestions)
+        Items: =cQuestions
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         TemplatePadding: =1
@@ -525,47 +526,13 @@ FormFabric As screen:
 
         inputSubForm As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
-            Height: =70
+            Height: =vHeightDynamic_4.Text
             Items: =ThisItem
             Layout: =Layout.Vertical
             TemplateSize: =Self.Height-10
-            Visible: |
-                =And(First(Self.AllItems).InputType.Value="SubForm",vVisible.Text="true")
+            Visible: =And(First(Self.AllItems).InputType.Value="SubForm",Boolean(vVisible.Text))
             Width: =inputString.Width
             ZIndex: =6
-
-            Button1_3 As button:
-                BorderColor: =RGBA(0, 0, 0, 0)
-                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                DisabledColor: =RGBA(166, 166, 166, 1)
-                DisabledFill: =RGBA(244, 244, 244, 1)
-                Fill: =RGBA(105, 121, 126, 1)
-                FocusedBorderColor: =ColorFade(Self.Fill, -75%)
-                Font: =Font.'Segoe UI'
-                FontWeight: =FontWeight.Semibold
-                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                HoverColor: =RGBA(255, 255, 255, 1)
-                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
-                OnSelect: |-
-                    =ClearCollect(cSubForm,{});Clear(cSubForm);
-                    With({formId:Value(ParseJSON(ThisItem.Parameters).formId)},
-                    ForAll(ForAll(Split(LookUp(Forms,ID=formId).Questions,","), {Result: ThisRecord.Value}),
-                    With({vId:Value(Result)},
-                    Collect(cSubForm,LookUp(Questions,ID=vId))
-                    )));
-                    UpdateContext({showSubForm:true,parentQuestion:ThisItem})
-                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
-                PressedColor: =RGBA(255, 255, 255, 1)
-                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
-                RadiusBottomLeft: =0
-                RadiusBottomRight: =0
-                RadiusTopLeft: =0
-                RadiusTopRight: =0
-                Size: =15
-                Text: ="Button"
-                Visible: =false
-                X: =348
-                ZIndex: =1
 
             lblTop_4 As htmlViewer:
                 AutoHeight: =true
@@ -661,6 +628,14 @@ FormFabric As screen:
                 X: =lblMid_4.Width
                 Y: =0
                 ZIndex: =8
+
+            HtmlText1 As htmlViewer:
+                AutoHeight: =true
+                HtmlText: =Substitute(LookUp(cResult,ID=ThisItem.ID).response,Char(34),"")&"ooooooooooooooooo"
+                OnSelect: =Select(Parent)
+                Width: =Parent.Width
+                Y: =50
+                ZIndex: =9
 
         "inputPersonPicker As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
