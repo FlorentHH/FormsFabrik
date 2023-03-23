@@ -20,6 +20,7 @@ FormFabric As screen:
         ClearCollect(globalVariable
         ,{type:"screenStatus",value:"Edit"}
         ,{type:"subFormId",value:""}
+        ,{type:"subFormName",value:""}
         ,{type:"showSubForm",value:""}
         );
         
@@ -642,6 +643,7 @@ FormFabric As screen:
                     Collect(cResult,{ID:vId,response:"",savedName:LookUp(cQuestions,ID=vId).SavedName});
                     
                     Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"true"});
+                    Patch(globalVariable,LookUp(globalVariable,type="subFormName"),{value:LookUp(Forms,ID=formID).Title});
                     Patch(globalVariable,LookUp(globalVariable,type="subFormId"),{value:formID});
                     
                     ));
@@ -1013,6 +1015,104 @@ FormFabric As screen:
                 Y: =40
                 ZIndex: =5
 
+    "Breadcrumb1_1 As 'Fluent Breadcrumb (1.0.19)'.pcfdataset":
+        AccessibilityLabel: ="Fluent UI Breadcrumb"
+        DisplayMode: =DisplayMode.Edit
+        Height: =43
+        Items: |-
+            =If(Boolean(vShowSubForm.Text),
+            
+            Table(
+                {
+                    ItemKey: "1",
+                    ItemDisplayName: Nav1_1.Selected.ItemDisplayName,
+                    ItemClickable: false
+                },
+                    {
+                    ItemKey: "2",
+                    ItemDisplayName: LookUp(globalVariable,type="subFormName").value,
+                    ItemClickable: false
+                }
+            ),
+            Table(
+                {
+                    ItemKey: "1",
+                    ItemDisplayName: Nav1_1.Selected.ItemDisplayName,
+                    ItemClickable: false
+                }
+            ))
+        MaxDisplayedItems: =5
+        OverflowIndex: =2
+        Theme: =AppThemeJson
+        Width: =521
+        X: =391
+        Y: =12
+        ZIndex: =13
+
+    Icon5 As icon.Save:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =ColorValue(AppTheme.palette.themePrimary)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =37
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Save
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Visible: =Boolean(vShowSubForm.Text)
+        Width: =37
+        X: =1043
+        Y: =18
+        ZIndex: =14
+
+    Icon5_1 As icon.Save:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =ColorValue(AppTheme.palette.themePrimary)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =37
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Cancel
+        OnSelect: |
+            =UpdateContext({showLoadingForm:true});
+            Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"false"});
+            ClearCollect(cResult,cResultBuffer);Clear(cResultBuffer);
+            ClearCollect(cQuestions,cQuestionsBuffer);Clear(cQuestionsBuffer);
+            UpdateContext({showLoadingForm:false});
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(0, 120, 212, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Visible: =Boolean(vShowSubForm.Text)
+        Width: =37
+        X: =858
+        Y: =19
+        ZIndex: =15
+
+    vShowSubForm As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        Height: =0
+        Size: =13
+        Text: =LookUp(globalVariable,type="showSubForm").value
+        Visible: =false
+        Width: =0
+        ZIndex: =16
+
     Group1 As group:
         Height: =5
         Width: =5
@@ -1112,18 +1212,6 @@ FormFabric As screen:
             X: =1156
             Y: =15
             ZIndex: =6
-
-        Label1_11 As Label:
-            Color: =ColorValue(AppTheme.palette.neutralPrimary)
-            DisplayMode: =DisplayMode.Edit
-            FontSize: =14
-            FontWeight: =FontWeight.Semibold
-            Height: =45
-            Text: =Nav1_1.Selected.ItemDisplayName
-            Width: =690
-            X: =401
-            Y: =15
-            ZIndex: =7
 
         Label1_12 As Label:
             Color: =ColorValue(AppTheme.palette.neutralPrimary)
