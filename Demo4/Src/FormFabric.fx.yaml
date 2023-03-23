@@ -19,34 +19,11 @@ FormFabric As screen:
         
         ClearCollect(globalVariable
         ,{type:"screenStatus",value:"Edit"}
+        ,{type:"subFormId",value:""}
+        ,{type:"showSubForm",value:""}
         );
         
         
-        
-        ClearCollect(
-            PreSelectedUserCollection,
-            AddColumns(
-               // Get first 5 users who have email ID - optional
-                Filter(
-                    Office365Users.SearchUser({top: 5}),
-                    Mail <> Blank()
-                ),
-                "PersonaKey",
-                Mail,
-                "PersonaName",
-                DisplayName,
-                "PersonaImgUrl",
-                //Get base64 image data
-                Substitute(
-                    JSON(
-                        Office365Users.UserPhotoV2(Id),
-                        JSONFormat.IncludeBinaryData
-                    ),
-                    """",
-                    ""
-                )
-            )
-        );Clear(PreSelectedUserCollection);
         
         Clear(barNav);
         ForAll(Forms,Collect(barNav,{ItemKey:ThisRecord.ID,ItemDisplayName:ThisRecord.Name}));
@@ -545,7 +522,6 @@ FormFabric As screen:
 
         inputSubForm As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
-            Fill: =RGBA(253, 222, 207, 1)
             Height: =70
             Items: =ThisItem
             Layout: =Layout.Vertical
@@ -584,25 +560,47 @@ FormFabric As screen:
                 RadiusTopRight: =0
                 Size: =15
                 Text: ="Button"
+                Visible: =false
                 X: =348
                 ZIndex: =1
 
-            Label2_1 As label:
-                BorderColor: =RGBA(0, 0, 0, 0)
-                BorderStyle: =BorderStyle.None
-                BorderThickness: =2
-                Color: =RGBA(51, 51, 51, 1)
-                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                DisabledColor: =RGBA(166, 166, 166, 1)
-                FocusedBorderThickness: =4
+            lblTop_4 As htmlViewer:
+                AutoHeight: =true
                 Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Top
                 OnSelect: =Select(Parent)
-                Size: =13
-                Text: =ThisItem.Name
-                Width: =348
-                ZIndex: =2
+                Visible: =!IsBlank(Self.HtmlText)
+                Width: =Parent.Width
+                ZIndex: =4
 
-            Label2_2 As label:
+            lblMid_4 As htmlViewer:
+                Fill: =RGBA(0, 0, 0, 0)
+                Font: =Font.'Segoe UI'
+                Height: =45
+                HtmlText: ="<b>"&ThisItem.Name&"</b>"
+                OnSelect: =Select(Parent)
+                Width: |
+                    =300
+                Y: |-
+                    =If(lblTop_4.Visible,
+                    lblTop_4.Height+lblTop_4.Y,0)
+                ZIndex: =5
+
+            lblBot_4 As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                Height: =0
+                HtmlText: =ThisItem.Bot
+                OnSelect: =Select(Parent)
+                Visible: =false
+                Width: =Parent.Width
+                X: |
+                    =0
+                Y: =DatePicker1_2.Height+DatePicker1_2.Y
+                ZIndex: =6
+
+            vHeightDynamic_4 As label:
                 BorderColor: =RGBA(0, 0, 0, 0)
                 BorderStyle: =BorderStyle.None
                 BorderThickness: =2
@@ -613,10 +611,51 @@ FormFabric As screen:
                 Font: =Font.'Segoe UI'
                 OnSelect: =Select(Parent)
                 Size: =13
-                Text: =Value(ParseJSON(ThisItem.Parameters).formId)
-                Width: =348
-                X: =534
-                ZIndex: =3
+                Text: |-
+                    =/*If(lblBot.Visible,lblBot.Height,0)+
+                    DatePicker1_2.Height+
+                    If(lblTop.Visible,lblTop.Height+lblTop.Y,0)+10*/
+                    lblBot_4.Height+lblMid_4.Height+lblTop_4.Height+15
+                Visible: =vCommandBar="Show Parameters"
+                Width: =50
+                X: =1000
+                ZIndex: =7
+
+            Button1_4 As Button:
+                ButtonType: ='Microsoft.CoreControls.Button.ButtonType'.Standard
+                DisplayMode: =DisplayMode.Edit
+                FillColor: =ColorValue(AppTheme.palette.themePrimary)
+                Height: =32
+                OnSelect: |-
+                    =UpdateContext({showLoadingForm:true});
+                    With({formID:Text(ParseJSON(ThisItem.Parameters).formId)},
+                    
+                    
+                    ClearCollect(cQuestionsBuffer,cQuestions);Clear(cQuestions);
+                    ClearCollect(cResultBuffer,cResult);Clear(cResult);
+                    
+                    ForAll(ForAll(Split(
+                        LookUp(Forms,ID=Value(formID)).Questions
+                        ,","), {Result: ThisRecord.Value}),
+                    With({vId:Value(Result)},
+                    Collect(cQuestions,LookUp(Questions,ID=vId));
+                    Collect(cResult,{ID:vId,response:"",savedName:LookUp(cQuestions,ID=vId).SavedName});
+                    
+                    Patch(globalVariable,LookUp(globalVariable,type="showSubForm"),{value:"true"});
+                    Patch(globalVariable,LookUp(globalVariable,type="subFormId"),{value:formID});
+                    
+                    ));
+                    
+                    
+                    
+                    
+                    UpdateContext({showLoadingForm:false});
+                    )
+                TextColor: =ColorValue(AppTheme.palette.white)
+                Width: =96
+                X: =lblMid_4.Width
+                Y: =0
+                ZIndex: =8
 
         "inputPersonPicker As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
