@@ -526,7 +526,7 @@ FormFabric As screen:
 
         inputSubForm As gallery.galleryVertical:
             BorderColor: =RGBA(166, 166, 166, 1)
-            Height: =vHeightDynamic_4.Text
+            Height: =150
             Items: =ThisItem
             Layout: =Layout.Vertical
             TemplateSize: =Self.Height-10
@@ -585,7 +585,7 @@ FormFabric As screen:
                     =/*If(lblBot.Visible,lblBot.Height,0)+
                     DatePicker1_2.Height+
                     If(lblTop.Visible,lblTop.Height+lblTop.Y,0)+10*/
-                    lblBot_4.Height+lblMid_4.Height+lblTop_4.Height+15
+                    lblBot_4.Height+lblMid_4.Height+lblTop_4.Height+150
                 Visible: =vCommandBar="Show Parameters"
                 Width: =50
                 X: =1000
@@ -628,14 +628,6 @@ FormFabric As screen:
                 X: =lblMid_4.Width
                 Y: =0
                 ZIndex: =8
-
-            HtmlText1 As htmlViewer:
-                AutoHeight: =true
-                HtmlText: =Substitute(LookUp(cResult,ID=ThisItem.ID).response,Char(34),"")&"ooooooooooooooooo"
-                OnSelect: =Select(Parent)
-                Width: =Parent.Width
-                Y: =50
-                ZIndex: =9
 
         "inputPersonPicker As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
