@@ -436,7 +436,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "CustomPCFInputTextFormatterControl1",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1076,7 +1076,14 @@
       "ControlPropertyState": [
         "X",
         "Y",
-        "Width",
+        {
+          "AFDDataSourceName": "",
+          "AutoRuleBindingEnabled": false,
+          "AutoRuleBindingString": "709",
+          "InvariantPropertyName": "Width",
+          "IsLockable": false,
+          "NameMapSourceSchema": "?"
+        },
         {
           "AFDDataSourceName": "",
           "AutoRuleBindingEnabled": false,
@@ -7447,7 +7454,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "lblMid_1",
-      "ParentIndex": 2,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12090,7 +12097,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "vHeightDynamic",
-      "ParentIndex": 4,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
