@@ -12,10 +12,10 @@ Screen1 As screen:
         Y: =40
         ZIndex: =1
 
-    RichTextEditor1 As richTextEditor:
-        BorderColor: =RGBA(166, 166, 166, 1)
-        Default: ="Enter some <strong>rich text</strong> here."
-        X: =714
-        Y: =87
-        ZIndex: =2
+        RichTextEditor1 As richTextEditor:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            Default: ="Enter some <strong>rich text</strong> here."
+            X: =714
+            Y: =87
+            ZIndex: =2
 
