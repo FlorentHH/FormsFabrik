@@ -1,8 +1,5 @@
 {
   "46df8e4e-677b-4c9c-9dd2-61f6f92e0f67": {
-    "connectionParameters": {
-      "sku": "Enterprise"
-    },
     "connectionRef": {
       "apiTier": "Standard",
       "displayName": "Office 365 Users",
@@ -20,9 +17,6 @@
     "id": "46df8e4e-677b-4c9c-9dd2-61f6f92e0f67"
   },
   "ebce3876-4bdf-45f0-85fc-59e08b1ac367": {
-    "connectionParameters": {
-      "sku": "Enterprise"
-    },
     "connectionRef": {
       "apiTier": "Standard",
       "displayName": "SharePoint",
