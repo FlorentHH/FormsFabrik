@@ -55,7 +55,7 @@
       "exportimportcomponents2": true,
       "externalmessage": false,
       "fluentv9controls": false,
-      "fluentv9controlspreview": false,
+      "fluentv9controlspreview": true,
       "formuladataprefetch": true,
       "formularepair": true,
       "generatedebugpublishedapp": true,
@@ -104,6 +104,7 @@
     "FileID": "44c84035-97ec-423f-a086-82cf386e0a0c",
     "Id": "8b3c568c-509a-41c9-9364-da97d46d5f8e",
     "InstrumentationKey": "",
+    "ManualOfflineProfileId": "",
     "Name": "Forms Fabric v2",
     "OriginatingVersion": "1.276"
   },

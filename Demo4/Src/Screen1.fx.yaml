@@ -18,7 +18,7 @@ Screen1 As screen:
         RichTextEditor1 As richTextEditor:
             BorderColor: =RGBA(166, 166, 166, 1)
             Default: =ThisItem.SampleHeading
-            Visible: =false
+            Visible: =If(showRich=ThisItem.SampleHeading,true,false)
             X: =15
             Y: =3
             ZIndex: =2
@@ -26,11 +26,20 @@ Screen1 As screen:
         HtmlText2 As htmlViewer:
             Height: =38
             HtmlText: =RichTextEditor1.HtmlText
-            OnSelect: =Select(Parent)
+            OnSelect: |-
+                =UpdateContext({showRich:ThisItem.SampleHeading})
             PaddingBottom: =0
             PaddingTop: =0
             Width: =174
             ZIndex: =3
+
+        "InfoButtonCanvas1 As 'Info button'":
+            DisplayMode: =DisplayMode.Edit
+            Height: =32
+            Width: =32
+            X: =120
+            Y: =0
+            ZIndex: =4
 
     HtmlText1 As htmlViewer:
         Fill: =RGBA(237, 237, 237, 1)
