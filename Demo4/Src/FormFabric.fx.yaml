@@ -173,12 +173,12 @@ FormFabric As screen:
         "inputDate As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver4.0'":
             AccessibleLabel: =
             BorderColor: =RGBA(166, 166, 166, 1)
-            Height: =Value(First(Self.AllItems).vHeightDynamic_1.Text)
+            Height: =Value(vMasterHeight.Text)
             Items: =ThisItem
             Layout: =Layout.Vertical
             ShowScrollbar: =false
             TemplatePadding: =0
-            TemplateSize: =lblBot_1.Height+lblMid_1.Height+lblTop_1.Height
+            TemplateSize: =Self.Height
             Visible: =And(First(Self.AllItems).InputType.Value="Date",Boolean(vVisible.Text))
             Width: =Parent.Width
             ZIndex: =4
@@ -258,15 +258,17 @@ FormFabric As screen:
             AccessibleLabel: =
             BorderColor: =RGBA(166, 166, 166, 1)
             Height: |-
-                =Value(First(Self.AllItems).vHeightDynamic.Text)
+                =//Value(First(Self.AllItems).vHeightDynamic.Text)
                 //Value(vHeightDynamic.Text)
+                Value(vMasterHeight.Text)
             ItemAccessibleLabel: =
             Items: =ThisItem
             Layout: =Layout.Vertical
             ShowScrollbar: =false
             TemplatePadding: =0
             TemplateSize: |-
-                =With({aaa:lblBot_1.Height+lblMid_1.Height+lblTop_1.Height},If(aaa<80,80,aaa))
+                =//With({aaa:lblBot_1.Height+lblMid_1.Height+lblTop_1.Height},If(aaa<80,80,aaa))
+                Self.Height
             Visible: |+
                 =First(Self.AllItems).InputType.Value="String"
                 
@@ -634,14 +636,12 @@ FormFabric As screen:
             AccessibleLabel: =
             BorderColor: =RGBA(166, 166, 166, 1)
             Height: |
-                =Value(First(Self.AllItems).vHeightDynamic_2.Text)
+                =Value(vMasterHeight.Text)
             Items: =ThisItem
             Layout: =Layout.Vertical
             ShowScrollbar: =false
             TemplatePadding: =0
-            TemplateSize: |-
-                =//lblBot_1.Height+lblMid_1.Height+lblTop_1.Height
-                100
+            TemplateSize: =Self.Height
             Visible: =First(Self.AllItems).InputType.Value="PersonPicker"
             Width: =Parent.Width
             ZIndex: =7
@@ -985,6 +985,25 @@ FormFabric As screen:
                 X: =649
                 Y: =40
                 ZIndex: =5
+
+        vMasterHeight As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            OnSelect: =Select(Parent)
+            Size: =13
+            Text: |-
+                =If(inputString.Visible,inputString.Selected.vHeightDynamic.Text,0)
+                +If(inputPersonPicker.Visible,inputPersonPicker.Selected.vHeightDynamic_2.Text,0)
+                +If(inputDate.Visible,inputDate.Selected.vHeightDynamic_1.Text,0)
+            Visible: =vCommandBar="Show Parameters"
+            X: =1148
+            ZIndex: =15
 
     "Breadcrumb1_1 As 'Fluent Breadcrumb (1.0.19)'.pcfdataset":
         AccessibilityLabel: ="Fluent UI Breadcrumb"

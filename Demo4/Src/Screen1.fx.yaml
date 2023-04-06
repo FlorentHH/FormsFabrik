@@ -4,18 +4,83 @@ Screen1 As screen:
     Gallery4 As gallery.variableTemplateHeightGallery:
         BorderColor: =RGBA(166, 166, 166, 1)
         DelayItemLoading: =true
+        Fill: =RGBA(237, 237, 237, 1)
+        Height: =691
         Items: =CustomGallerySample
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
-        TemplateSize: =280
-        X: =40
-        Y: =40
+        TemplateSize: =164
+        Width: =560
+        Y: =339
         ZIndex: =1
 
         RichTextEditor1 As richTextEditor:
             BorderColor: =RGBA(166, 166, 166, 1)
-            Default: ="Enter some <strong>rich text</strong> here."
-            X: =714
-            Y: =87
+            Default: =ThisItem.SampleHeading
+            X: =15
+            Y: =3
             ZIndex: =2
+
+    HtmlText1 As htmlViewer:
+        Fill: =RGBA(237, 237, 237, 1)
+        Height: =691
+        HtmlText: =Concat(Gallery4.AllItems,RichTextEditor1.HtmlText)
+        Width: =866
+        X: =572
+        Y: =339
+        ZIndex: =2
+
+    Label13 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Bold
+        Height: =84
+        Size: =13
+        Text: ="Rich Text inside a Gallery"
+        Width: =498
+        X: =47
+        Y: =105
+        ZIndex: =3
+
+    Label13_1 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Bold
+        Height: =84
+        Size: =13
+        Text: ="Concat of rich Text to show that input works flawless"
+        Width: =498
+        X: =572
+        Y: =207
+        ZIndex: =4
+
+    Image1 As image:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =120
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Image: ='2023-04-06 20_46_37-Power Apps and 12 more pages - Profile 2 - Microsoft​ Edge'
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =516
+        X: =18
+        Y: =189
+        ZIndex: =5
 
