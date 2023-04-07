@@ -29,14 +29,7 @@ Screen1 As screen:
             X: =969
             ZIndex: =1
 
-        RichTextEditor1 As richTextEditor:
-            BorderColor: =RGBA(166, 166, 166, 1)
-            Default: =ThisItem.SampleHeading
-            Height: =300
-            Visible: =If(showRich=ThisItem.SampleHeading,true,false)
-            Width: =600
-            X: =HtmlText2.X
-            ZIndex: =3
+
 
         HtmlText3 As htmlViewer:
             Fill: =RGBA(250, 155, 112, 1)
